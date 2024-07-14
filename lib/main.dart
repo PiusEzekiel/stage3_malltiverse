@@ -12,13 +12,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       // title: 'Stage2 Product App',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      // ),
-      home: ProductListScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        colorScheme: const ColorScheme.light(
+          primary: Color.fromRGBO(255, 127, 125, 1),
+          onPrimary: Colors.white,
+          secondary: Color(0x2A2A2A),
+          tertiary: Color.fromRGBO(42, 42, 42, 1),
+        ),
+      ),
+      home: const ProductListScreen(),
     );
   }
 }

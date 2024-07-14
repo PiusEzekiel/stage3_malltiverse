@@ -62,34 +62,19 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer(); // Open the drawer
-              },
-              icon: const Icon(Icons.menu), // Or use a hamburger icon
-            );
-          },
-        ),
         title: const Center(
-          child: Text(
-            'Timbu Products',
-            style: TextStyle(color: Colors.white),
+          child: Row(
+            children: [
+              Image(image: AssetImage('assets/Malltiverse Logo.png')),
+              SizedBox(width: 30),
+              Text(
+                'Product List',
+              ),
+            ],
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Navigate to cart screen
-            },
-            icon: const Icon(Icons.shopping_cart),
-          ),
-        ],
-        backgroundColor: Colors.blueGrey.shade600,
       ),
       body: RefreshIndicator(
-        backgroundColor: Colors.blueGrey.shade200,
         onRefresh: _fetchProducts,
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -107,135 +92,298 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     ),
                   )
                 : Container(
-                    color: Colors.blueGrey.shade100,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 20.0),
-                      child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  //will change the aspect ratio to 9/18
-                                  childAspectRatio: 9 / 17),
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final product = products[index];
-                            // print(product); // Print the product to the console
-
-                            if (product.photos.isNotEmpty) {
-                              final firstPhoto = product.photos[0];
-                              final fullImageUrl =
-                                  imageBaseUrl! + firstPhoto.url!;
-                              return Material(
-                                elevation: 3,
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 232,
+                          width: MediaQuery.of(context).size.width,
+                          // width: 600,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // Your image or other widget
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  'assets/#Headphones.png',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
                                 ),
-                                child: InkWell(
-                                  onTap: () {
-                                    // Navigate to product details screen
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProductDetailsScreen(
-                                                product: product),
+                              ),
+                              // Your interactive child widget
+                              Positioned(
+                                top: 60,
+                                left: 25, // Position the widget at the bottom
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Premium Sound,",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w900,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                    ),
+                                    Text(
+                                      "Premium Savings",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w900,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        "Limited offer, hope on and get yours now",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: "Montserrat",
+                                            fontWeight: FontWeight.w900,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary),
                                       ),
-                                    );
-                                  },
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ), // Only top corners rounde
-                                          child: Image.network(
-                                            fullImageUrl,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Icon(Icons.error);
-                                            },
-                                            // width: 80, // Adjust image width
-                                            // height: 80, // Adjust image height
-                                            // fit: BoxFit
-                                            //     .fill, // Ensure image covers the space
-                                          ),
-                                        ),
-                                        //   ??
-                                        // const Icon(Icons.image_not_supported);
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 4,
-                                          ),
-
-                                          //name of the product
-                                          child: Text(
-                                            product.name ?? 'No name',
-                                            style: TextStyle(
-                                              fontSize: 18, // Adjust font size
-                                              fontWeight: FontWeight
-                                                  .bold, // Make title bold
-                                              color: Colors.blueGrey.shade900,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 4,
-                                          ),
-
-                                          //description of the product
-                                          child: Text(
-                                            product.description ??
-                                                'No description',
-                                            style:
-                                                const TextStyle(fontSize: 16.0),
-                                          ),
-                                        ),
-
-                                        Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 1,
-                                            ), // Add some spacing between title and price
-
-                                            child: Text(
-                                              '\$${product.currentPrice[0].amount ?? 0.0}',
-                                              style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors
-                                                    .red, // Make price slightly bold
-                                              ),
-                                            )),
-                                        const Spacer(),
-                                        Container(
-                                          alignment: Alignment.bottomRight,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              // Add product to cart
-                                            },
-                                            icon: const Icon(
-                                              Icons.add_circle_outline,
-                                              size: 30,
-                                            ),
-                                          ),
-                                        ),
-                                      ]),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            top: 40.0,
+                            bottom: 8,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Tech Gadget",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      //will change the aspect ratio to 9/18
+                                      childAspectRatio: 9 / 18),
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                final product = products[index];
+                                // print(product); // Print the product to the console
+
+                                if (product.photos.isNotEmpty) {
+                                  final firstPhoto = product.photos[0];
+                                  final fullImageUrl =
+                                      imageBaseUrl! + firstPhoto.url!;
+                                  return Material(
+                                    // elevation: 3,
+                                    // color: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        // borderRadius: BorderRadius.circular(20),
+                                        ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        // Navigate to product details screen
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductDetailsScreen(
+                                                    product: product),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius: const BorderRadius
+                                                  .only(
+                                                  // topLeft: Radius.circular(20),
+                                                  // topRight: Radius.circular(20),
+                                                  ), // Only top corners rounde
+                                              child: Container(
+                                                height: 185,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Center(
+                                                  // widthFactor: 2,
+                                                  child: Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    child: Image.network(
+                                                      fullImageUrl,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return const Icon(
+                                                            Icons.error);
+                                                      },
+                                                      width:
+                                                          30, // Adjust image width
+                                                      height:
+                                                          80, // Adjust image height
+                                                      fit: BoxFit
+                                                          .fitHeight, // Ensure image covers the space
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            //   ??
+                                            // const Icon(Icons.image_not_supported);
+
+                                            //name of the product
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                // horizontal: 12,
+                                                top: 12,
+                                              ),
+                                              child: Text(
+                                                product.name ?? 'No name',
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      12, // Adjust font size
+                                                  // fontFamily: "Montserrat",
+                                                  fontWeight: FontWeight
+                                                      .bold, // Make title bold
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                // horizontal: 12,
+                                                top: 4,
+                                              ),
+
+                                              //description of the product
+                                              child: Text(
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                product.description ??
+                                                    'No description',
+                                                style: const TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w900,
+                                                  fontFamily: 'Montserrat',
+                                                  // maxLines: 1,
+                                                ),
+                                              ),
+                                            ),
+
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                // horizontal: 12,
+                                                top: 6,
+                                              ),
+
+                                              //price of the product
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.star,
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      size: 18),
+                                                  Icon(Icons.star,
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      size: 18),
+                                                  Icon(Icons.star,
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      size: 18),
+                                                  Icon(Icons.star,
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      size: 18),
+                                                  Icon(Icons.star,
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      size: 18),
+                                                ],
+                                              ),
+                                            ),
+
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  // horizontal: 12,
+                                                  vertical: 12,
+                                                ), // Add some spacing between title and price
+
+                                                child: Text(
+                                                  '\N ${product.currentPrice[0].amount ?? 0.0}',
+                                                  style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary // Make price slightly bold
+                                                      ),
+                                                )),
+                                            OutlinedButton(
+                                              onPressed: () {},
+                                              style: OutlinedButton.styleFrom(
+                                                // primary: Colors.blueGrey.shade600,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 0),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            14)),
+                                                side: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  style: BorderStyle.solid,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Text(
+                                                'Add to Cart',
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .tertiary,
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                          ]),
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox.shrink();
+                                }
+                              }),
+                        ),
+                      ],
                     ),
                   ),
       ),
